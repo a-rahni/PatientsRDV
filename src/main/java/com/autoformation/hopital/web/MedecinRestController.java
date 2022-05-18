@@ -2,6 +2,7 @@ package com.autoformation.hopital.web;
 
 import com.autoformation.hopital.entities.Medecin;
 import com.autoformation.hopital.entities.Patient;
+import com.autoformation.hopital.entities.RendezVous;
 import com.autoformation.hopital.services.IMedecinService;
 import com.autoformation.hopital.services.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,12 @@ public class MedecinRestController {
         else {
             throw new RuntimeException("Medecin not found");
         }
+    }
+
+
+    @GetMapping("/medecins/{id}/openRdv"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+    public List<RendezVous> getOpenRdv(@PathVariable Long id){
+        return (List<RendezVous>) medecinService.getOpenRdvMedecinById(id);
     }
 
 }

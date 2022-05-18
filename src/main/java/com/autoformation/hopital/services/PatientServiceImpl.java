@@ -1,6 +1,7 @@
 package com.autoformation.hopital.services;
 
 import com.autoformation.hopital.entities.Patient;
+import com.autoformation.hopital.entities.RendezVous;
 import com.autoformation.hopital.repositories.PatientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,4 +60,5 @@ public class PatientServiceImpl implements IPatientService {
 
         return patientRepository.findByNom(name);
     }
+
 }

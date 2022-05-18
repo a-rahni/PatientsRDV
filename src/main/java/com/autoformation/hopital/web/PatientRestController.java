@@ -2,13 +2,16 @@ package com.autoformation.hopital.web;
 
 import com.autoformation.hopital.entities.Patient;
 import com.autoformation.hopital.services.IPatientService;
+import com.autoformation.hopital.services.IRendezVousService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 //@RequestMapping("/API")
@@ -16,6 +19,8 @@ public class PatientRestController {
 
     @Autowired
     private IPatientService patientService;
+    @Autowired
+    private IRendezVousService rendezVousService;
 
     @GetMapping("/")
     public String home(){
@@ -81,5 +86,17 @@ public class PatientRestController {
             throw new RuntimeException("Patient not found");
         }
     }
+
+//    /*   Rendez vous par patient*/
+//    @GetMapping(path="/patients/test"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+//    public List<Patient> patientListtest(){
+//        return ((List<Patient>) (patientService.getAllPatient()));
+//    }
+//    //public List<RendezVous> getRdvPatient(@PathVariable Long id, @RequestParam(name="date", defaultValue="new Date()") Date date){
+////    public List<Patient> getRdvPatient(/*@PathVariable Long id*/) {
+//////        return (List<RendezVous>) patientService.getRendezVousByPatient(id);
+//////    }
+////        return ((List<Patient>) (patientService.getAllPatient()));
+////    }
 
 }

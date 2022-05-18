@@ -2,6 +2,7 @@ package com.autoformation.hopital.services;
 
 import com.autoformation.hopital.entities.Medecin;
 import com.autoformation.hopital.entities.Patient;
+import com.autoformation.hopital.entities.RendezVous;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +20,6 @@ public interface IMedecinService {
     Optional<Medecin> getMedecinById(Long id);
     Collection<Medecin> getMedecinByName(String name);
     //Iterable<Medecin> getMedecinByName(String name);
+
+    Collection<RendezVous> getOpenRdvMedecinById(Long id);
 }

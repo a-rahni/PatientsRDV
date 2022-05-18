@@ -83,7 +83,7 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			calendar.set(Calendar.MINUTE, 30);
 
 			RendezVous rendezVous = new RendezVous();
-			rendezVous.setDate( new Date(calendar.getTimeInMillis()));
+			rendezVous.setDate(calendar.getTime());
 			rendezVous.setStatus(StatusRDV.PENDING);
 			rendezVous.setMedecin(medecin);
 			rendezVous.setPatient(patient);
@@ -104,6 +104,32 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			cons1.setRapport("Rapport de la cosnultation 1");
 			//red1.setConsultation(cons1);
 			consultationRepo.saveConsultation(cons1);
+
+			Calendar calendar2= new GregorianCalendar(2022, Calendar.SEPTEMBER, 05);
+			calendar2.set(Calendar.HOUR, 17);
+			calendar2.set(Calendar.MINUTE, 30);
+
+			RendezVous rendezVous2 = new RendezVous();
+			rendezVous2.setDate(calendar2.getTime());
+			rendezVous2.setStatus(StatusRDV.PENDING);
+			rendezVous2.setMedecin(medecin);
+			rendezVous2.setPatient(patient);
+
+			rendezVousRepo.saveRendezVous(rendezVous2);
+
+			// ouvrir rendez vous d'1h
+			calendar2.setTime(new Date());
+			for (int h=8; h<18; h++)
+			{
+				calendar2.set(Calendar.HOUR, h);
+				calendar2.set(Calendar.MINUTE, 0);
+				RendezVous rdv = new RendezVous();
+				rdv.setDate(calendar2.getTime());
+				rdv.setStatus(StatusRDV.OPEN);
+				rdv.setMedecin(medecin);
+				rendezVousRepo.saveRendezVous(rdv);
+			}
+
 
 			//cons1 = consultationRepo.getConsultationById(1L).orElse(null);
 			//consultationRepo.deleteConsultationById(1L);
