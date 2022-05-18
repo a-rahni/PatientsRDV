@@ -15,9 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 /*
@@ -76,12 +74,16 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			Patient patient = patientRepo.getPatientById(1L).orElse(null);
 			Iterable<Patient> patientList = patientRepo.getPatientByName("ahmed");
 
-			Optional<Medecin> med = medecinRepo.getMedecintById(1L);
-			Medecin medecin = medecinRepo.getMedecintById(1L).orElse(null);
+			Optional<Medecin> med = medecinRepo.getMedecinById(1L);
+			Medecin medecin = medecinRepo.getMedecinById(1L).orElse(null);
 			med.ifPresent(x->System.out.println("Medecin not NUl ************"));
 
+			Calendar calendar= new GregorianCalendar(2022, Calendar.JULY, 25);
+			calendar.set(Calendar.HOUR, 14);
+			calendar.set(Calendar.MINUTE, 30);
+
 			RendezVous rendezVous = new RendezVous();
-			rendezVous.setDate(new Date());
+			rendezVous.setDate( new Date(calendar.getTimeInMillis()));
 			rendezVous.setStatus(StatusRDV.PENDING);
 			rendezVous.setMedecin(medecin);
 			rendezVous.setPatient(patient);

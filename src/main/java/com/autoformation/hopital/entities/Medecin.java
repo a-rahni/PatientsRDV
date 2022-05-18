@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Medecin {
     @Column(name="prenom")
     private String prenom;
     @Column(name="dateNaissance")  @Temporal(TemporalType.DATE)  // garder que la date
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateNaissance;
     @Column(name="adresse")
     private String adresse;
@@ -30,11 +32,11 @@ public class Medecin {
     private String email;
     private String specialite;
 
-    @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
+    //@JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
     @OneToMany(
             mappedBy = "medecin",
-            fetch = FetchType.LAZY//,
-            //cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
             //orphanRemoval = true
     )
     // JPA EntityManagerFactory: Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn

@@ -2,9 +2,13 @@ package com.autoformation.hopital.services;
 
 import com.autoformation.hopital.entities.Medecin;
 import com.autoformation.hopital.repositories.MedecinRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -17,31 +21,42 @@ public class MedecinServiceImpl implements IMedecinService {
         this.medecinRepository = medecinRepository;
     }
 
+
     @Override
     public Medecin saveMedecin(Medecin medecin) {
-        // traitement
         return medecinRepository.save(medecin);
     }
 
     @Override
     public void deleteMedecinById(Long id) {
         medecinRepository.deleteById(id);
+
     }
 
     @Override
-    public Iterable<Medecin> getAllMedecin() {
+    public Collection<Medecin> getAllMedecin() {
 
         return medecinRepository.findAll();
     }
 
     @Override
-    public Optional<Medecin> getMedecintById(Long id) {
+    public Page<Medecin> getAllMedecin(int page, int size) {
+        return medecinRepository.findAll(PageRequest.of(page,size));
+    }
+
+    @Override
+    public Page<Medecin> getMedecinByName(String kw, Pageable page) {
+        return medecinRepository.findByNomContains(kw, page);
+    }
+
+    @Override
+    public Optional<Medecin> getMedecinById(Long id) {
 
         return medecinRepository.findById(id);
     }
 
     @Override
-    public Iterable<Medecin> getMedecinByName(String name) {
+    public Collection<Medecin> getMedecinByName(String name) {
 
         return medecinRepository.findByNom(name);
     }

@@ -29,6 +29,7 @@ public class RendezVous {
             //cascade = CascadeType.ALL
             //cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
+    @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="medecin_id")
     private Medecin medecin;
 
