@@ -1,6 +1,7 @@
 package com.autoformation.hopital.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.autoformation.hopital.dtos.Medecin;
+import com.autoformation.hopital.dtos.RendezVous;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,11 @@ import java.util.List;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
 @Table(name="medecin")
-public class Medecin {
+public class MedecinEntity {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-    @Column(name="nom", unique = true)
+    @Column(name="nom")
     private String nom;
     @Column(name="prenom")
     private String prenom;
@@ -40,5 +41,24 @@ public class Medecin {
             //orphanRemoval = true
     )
     // JPA EntityManagerFactory: Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn
-    private Collection<RendezVous> rendezVous = new ArrayList();
+    private Collection<RendezVousEntity> rendezVous = new ArrayList();
+
+    public Medecin toMedecinDto(){
+        Medecin m= new Medecin();
+
+        m.setId(this.id);
+        m.setNom(this.nom);
+        m.setPrenom(this.prenom);
+        m.setAdresse(this.adresse);
+        m.setEmail(this.email);
+        m.setDateNaissance(this.dateNaissance);
+        m.setSpecialite(this.specialite);
+
+        List<RendezVous> rdv = new ArrayList<RendezVous>() ;
+        for(RendezVousEntity r:rendezVous){
+            rdv.add(r.toRendezVousDto());
+        }
+        m.setRendezVous(rdv);
+        return m;
+    }
 }

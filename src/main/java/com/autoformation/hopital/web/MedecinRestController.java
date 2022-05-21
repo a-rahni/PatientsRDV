@@ -1,53 +1,67 @@
 package com.autoformation.hopital.web;
 
-import com.autoformation.hopital.entities.Medecin;
-import com.autoformation.hopital.entities.Patient;
-import com.autoformation.hopital.entities.RendezVous;
+import com.autoformation.hopital.dtos.Medecin;
+import com.autoformation.hopital.dtos.RendezVous;
+import com.autoformation.hopital.entities.MedecinEntity;
+import com.autoformation.hopital.entities.RendezVousEntity;
 import com.autoformation.hopital.services.IMedecinService;
-import com.autoformation.hopital.services.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-//@RequestMapping("/API")
+@RequestMapping("/medecins")
 public class MedecinRestController {
 
     @Autowired
     private IMedecinService medecinService;
 
-    @GetMapping("/medecins/{id}"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+    @GetMapping("/{id}"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
     public Medecin getMedecin(@PathVariable Long id){
-        return medecinService.getMedecinById(id).orElse(null);
+
+        Optional<MedecinEntity> m = medecinService.getMedecinById(id);
+        if(m.isPresent()){
+            return m.get().toMedecinDto();
+        }
+        else {
+            return null;
+        }
     }
 
-    @GetMapping(path = "/medecins/all"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+    @GetMapping(path = "/all"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
     public List<Medecin> medecinList(){
-        return ((List<Medecin>) (medecinService.getAllMedecin()));
+        return medecinService.getAllMedecin().stream().
+                map(m->m.toMedecinDto()).collect(Collectors.toList());
     }
 
     // methode recherche avec pagination exp  http://localhost:8086/medecins?(page=1,size=5,keyword=ah)
-    @GetMapping(path="/medecins"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+    @GetMapping(path="/search"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
     public Page<Medecin> medecins(
                          @RequestParam(name="page", defaultValue="0") int page,
                          @RequestParam(name="size",defaultValue="5") int size,
                          @RequestParam(name="keyword",defaultValue = "") String keyword){
-        return  (Page<Medecin>) medecinService.getMedecinByName(keyword, PageRequest.of(page,size));
+
+        Page<MedecinEntity> pageM = medecinService.getMedecinByName(keyword, PageRequest.of(page,size));
+       return (Page<Medecin>) pageM.stream()
+                .map(m->m.toMedecinDto()).collect(Collectors.toList());
+
     }
 
-    @DeleteMapping("/medecins/{id}")
+    @DeleteMapping("/{id}")
     // id est dans le path
     public void delete(@PathVariable Long id){
         medecinService.deleteMedecinById(id);
     }
 
-    @PostMapping(path="/medecins"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
+    @PostMapping(path="/new"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
     public Medecin save(@RequestBody Medecin medecin){
         if (!medecinService.getMedecinById(medecin.getId()).isPresent()) {
-            return medecinService.saveMedecin(medecin);
+            return medecinService.saveMedecin(medecin.toMedecinEntity()).toMedecinDto();
         }
         else{
             throw new RuntimeException("Add new Medecin with existing id is not possible");
@@ -55,34 +69,6 @@ public class MedecinRestController {
     }
 
 
-    @PutMapping(path="/medecins/{id}"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
-    public Medecin updateMedecin(@RequestBody Medecin medecin, @PathVariable Long id){
 
-        if (medecinService.getMedecinById(id).isPresent()) {
-            medecin.setId(id);
-            return medecinService.saveMedecin(medecin);
-        }
-        else {
-            throw new RuntimeException("Medecin not found");
-        }
-
-    }
-
-    @PatchMapping(path="/medecins/{id}"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
-    public Medecin updateMedecinFields(@RequestBody Medecin medecin, @PathVariable Long id){
-        if (medecinService.getMedecinById(id).isPresent()) {
-            medecin.setId(id);
-            return medecinService.saveMedecin(medecin);
-        }
-        else {
-            throw new RuntimeException("Medecin not found");
-        }
-    }
-
-
-    @GetMapping("/medecins/{id}/openRdv"/*, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}*/)
-    public List<RendezVous> getOpenRdv(@PathVariable Long id){
-        return (List<RendezVous>) medecinService.getOpenRdvMedecinById(id);
-    }
 
 }

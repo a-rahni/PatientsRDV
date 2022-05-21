@@ -1,21 +1,20 @@
 package com.autoformation.hopital.repositories;
 
-import com.autoformation.hopital.entities.Patient;
+import com.autoformation.hopital.entities.PatientEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.Collection;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient,Long> {
+public interface PatientRepository extends JpaRepository<PatientEntity,Long> {
 
     //Patient findById(Long Id);
-    Collection<Patient> findByNom(String name);
+    Collection<PatientEntity> findByNom(String name);
 
-    Page<Patient> findByNomContains(String kw, Pageable pageable);
+    Page<PatientEntity> findByNomContains(String kw, Pageable pageable);
 
     // JPQL  (pas de select)
     //@Query("FROM Patient WHERE name = ?1")

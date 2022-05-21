@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
 @Table(name="consultation")
-public class Consultation {
+public class ConsultationEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date dateConsultation;
@@ -26,5 +26,5 @@ public class Consultation {
     )
     @JoinColumn(name="rendezVous_id")
     @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
-    private RendezVous rendezVous;
+    private RendezVousEntity rendezVous;
 }

@@ -1,5 +1,6 @@
 package com.autoformation.hopital.entities;
 
+import com.autoformation.hopital.dtos.RendezVous;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,8 @@ import javax.persistence.*;
 import java.util.Date;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
-public class RendezVous {
+@Table(name="RendezVous")
+public class RendezVousEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;
@@ -22,7 +24,7 @@ public class RendezVous {
     )
     @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="patient_id")
-    private Patient patient;
+    private PatientEntity patient;
 
     @ManyToOne(
             fetch = FetchType.LAZY
@@ -31,10 +33,22 @@ public class RendezVous {
     )
     @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="medecin_id")
-    private Medecin medecin;
+    private MedecinEntity medecin;
 
     @OneToOne(mappedBy = "rendezVous",
             cascade = CascadeType.ALL
     )
-    private Consultation consultation;
+    private ConsultationEntity consultation;
+
+    public RendezVous toRendezVousDto(){
+        RendezVous rdv = new RendezVous();
+        rdv.setId(this.id);
+        //if(this.medecin != null)   rdv.setMedecin(this.medecin.toMedecinDto());
+        //if(this.patient != null)   rdv.setPatient(this.patient.toPatientDto());
+        rdv.setDate(this.date);
+        rdv.setStatus(this.status);
+        //rdv.setConsultation(this.consultation);
+
+        return rdv;
+    }
 }

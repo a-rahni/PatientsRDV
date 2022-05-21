@@ -1,11 +1,10 @@
 package com.autoformation.hopital.services;
 
-import com.autoformation.hopital.entities.RendezVous;
+import com.autoformation.hopital.entities.RendezVousEntity;
 import com.autoformation.hopital.repositories.RendezVousRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -17,13 +16,13 @@ public class RendezVousServiceImpl implements IRendezVousService {
         this.rendezVousRepository =rendezVousRepository;
     }
     @Override
-    public RendezVous saveRendezVous(RendezVous rendezVous) {
+    public RendezVousEntity saveRendezVous(RendezVousEntity rendezVous) {
         // traitement Métier avant le save: check date, disponibilté medecin ..
         return rendezVousRepository.save(rendezVous);
     }
 
     @Override
-    public Optional<RendezVous> getRendezVousById(Long id) {
+    public Optional<RendezVousEntity> getRendezVousById(Long id) {
         return rendezVousRepository.findById(id);
     }
 

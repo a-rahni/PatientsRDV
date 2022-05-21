@@ -1,7 +1,6 @@
 package com.autoformation.hopital.services;
 
-import com.autoformation.hopital.entities.Patient;
-import com.autoformation.hopital.entities.RendezVous;
+import com.autoformation.hopital.entities.PatientEntity;
 import com.autoformation.hopital.repositories.PatientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
-    public Patient savePatient(Patient patient) {
+    public PatientEntity savePatient(PatientEntity patient) {
         return patientRepository.save(patient);
     }
 
@@ -34,29 +33,29 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
-    public Collection<Patient> getAllPatient() {
+    public Collection<PatientEntity> getAllPatient() {
 
         return patientRepository.findAll();
     }
 
     @Override
-    public Page<Patient> getAllPatient(int page, int size) {
+    public Page<PatientEntity> getAllPatient(int page, int size) {
         return patientRepository.findAll(PageRequest.of(page,size));
     }
 
     @Override
-    public Page<Patient> getPatientByName(String kw, Pageable page) {
+    public Page<PatientEntity> getPatientByName(String kw, Pageable page) {
         return patientRepository.findByNomContains(kw, page);
     }
 
     @Override
-    public Optional<Patient> getPatientById(Long id) {
+    public Optional<PatientEntity> getPatientById(Long id) {
 
         return patientRepository.findById(id);
     }
 
     @Override
-    public Collection<Patient> getPatientByName(String name) {
+    public Collection<PatientEntity> getPatientByName(String name) {
 
         return patientRepository.findByNom(name);
     }

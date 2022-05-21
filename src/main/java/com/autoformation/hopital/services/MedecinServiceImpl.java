@@ -1,7 +1,7 @@
 package com.autoformation.hopital.services;
 
-import com.autoformation.hopital.entities.Medecin;
-import com.autoformation.hopital.entities.RendezVous;
+import com.autoformation.hopital.entities.MedecinEntity;
+import com.autoformation.hopital.entities.RendezVousEntity;
 import com.autoformation.hopital.entities.StatusRDV;
 import com.autoformation.hopital.repositories.MedecinRepository;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class MedecinServiceImpl implements IMedecinService {
 
 
     @Override
-    public Medecin saveMedecin(Medecin medecin) {
+    public MedecinEntity saveMedecin(MedecinEntity medecin) {
         return medecinRepository.save(medecin);
     }
 
@@ -37,37 +37,37 @@ public class MedecinServiceImpl implements IMedecinService {
     }
 
     @Override
-    public Collection<Medecin> getAllMedecin() {
+    public Collection<MedecinEntity> getAllMedecin() {
 
         return medecinRepository.findAll();
     }
 
     @Override
-    public Page<Medecin> getAllMedecin(int page, int size) {
+    public Page<MedecinEntity> getAllMedecin(int page, int size) {
         return medecinRepository.findAll(PageRequest.of(page,size));
     }
 
     @Override
-    public Page<Medecin> getMedecinByName(String kw, Pageable page) {
+    public Page<MedecinEntity> getMedecinByName(String kw, Pageable page) {
         return medecinRepository.findByNomContains(kw, page);
     }
 
     @Override
-    public Optional<Medecin> getMedecinById(Long id) {
+    public Optional<MedecinEntity> getMedecinById(Long id) {
 
         return medecinRepository.findById(id);
     }
 
     @Override
-    public Collection<Medecin> getMedecinByName(String name) {
+    public Collection<MedecinEntity> getMedecinByName(String name) {
 
         return medecinRepository.findByNom(name);
     }
 
     @Override
-    public Collection<RendezVous> getOpenRdvMedecinById(Long id) {
+    public Collection<RendezVousEntity> getOpenRdvMedecinById(Long id) {
 
-        Optional<Medecin> m = medecinRepository.findById(id);
+        Optional<MedecinEntity> m = medecinRepository.findById(id);
         if(m.isPresent()){
             return (m.get().getRendezVous().stream()
                     .filter(r->r.getStatus()== StatusRDV.OPEN)
@@ -78,5 +78,20 @@ public class MedecinServiceImpl implements IMedecinService {
             return null;
         }
 
+    }
+
+    @Override
+    public Collection<RendezVousEntity> getPendingRdvMedecinById(Long id) {
+
+        Optional<MedecinEntity> m = medecinRepository.findById(id);
+        if(m.isPresent()){
+            return (m.get().getRendezVous().stream()
+                    .filter(r->r.getStatus()== StatusRDV.PENDING)
+                    .collect(Collectors.toList()));
+        }
+        else
+        {
+            return null;
+        }
     }
 }

@@ -1,10 +1,6 @@
 package com.autoformation.hopital;
 
 import com.autoformation.hopital.entities.*;
-import com.autoformation.hopital.repositories.ConsultationRepository;
-import com.autoformation.hopital.repositories.MedecinRepository;
-import com.autoformation.hopital.repositories.PatientRepository;
-import com.autoformation.hopital.repositories.RendezVousRepository;
 import com.autoformation.hopital.services.IConsultationService;
 import com.autoformation.hopital.services.IMedecinService;
 import com.autoformation.hopital.services.IPatientService;
@@ -50,7 +46,7 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 		return args -> {
 			Stream.of("ahmed","christophe","Ali","Damien")
 					.forEach(name->{
-						Patient p = new Patient();
+						PatientEntity p = new PatientEntity();
 						p.setNom(name);
 						p.setPrenom(name+"Prenom");
 						p.setDateNaissance(new Date(1212121212121L));
@@ -62,7 +58,7 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 
 			Stream.of("Nicolas","Floriant","Justin","Farid")
 					.forEach(name->{
-						Medecin m = new Medecin();
+						MedecinEntity m = new MedecinEntity();
 						m.setNom(name);
 						m.setPrenom(name+"Prenom");
 						m.setDateNaissance(new Date( 1212121212121L));
@@ -71,18 +67,18 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 						m.setSpecialite(Math.random()>0.5?"Cardio":"Dentiste");
 						medecinRepo.saveMedecin(m);
 					});
-			Patient patient = patientRepo.getPatientById(1L).orElse(null);
-			Iterable<Patient> patientList = patientRepo.getPatientByName("ahmed");
+			PatientEntity patient = patientRepo.getPatientById(1L).orElse(null);
+			Iterable<PatientEntity> patientList = patientRepo.getPatientByName("ahmed");
 
-			Optional<Medecin> med = medecinRepo.getMedecinById(1L);
-			Medecin medecin = medecinRepo.getMedecinById(1L).orElse(null);
+			Optional<MedecinEntity> med = medecinRepo.getMedecinById(1L);
+			MedecinEntity medecin = medecinRepo.getMedecinById(1L).orElse(null);
 			med.ifPresent(x->System.out.println("Medecin not NUl ************"));
 
 			Calendar calendar= new GregorianCalendar(2022, Calendar.JULY, 25);
 			calendar.set(Calendar.HOUR, 14);
 			calendar.set(Calendar.MINUTE, 30);
 
-			RendezVous rendezVous = new RendezVous();
+			RendezVousEntity rendezVous = new RendezVousEntity();
 			rendezVous.setDate(calendar.getTime());
 			rendezVous.setStatus(StatusRDV.PENDING);
 			rendezVous.setMedecin(medecin);
@@ -93,11 +89,11 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			//patient.getRendezVous().add(rendezVous);
 			rendezVousRepo.saveRendezVous(rendezVous);
 
-			Optional<RendezVous> red = rendezVousRepo.getRendezVousById(1L);
-			RendezVous red1 = rendezVousRepo.getRendezVousById(1L).orElse(null);
+			Optional<RendezVousEntity> red = rendezVousRepo.getRendezVousById(1L);
+			RendezVousEntity red1 = rendezVousRepo.getRendezVousById(1L).orElse(null);
 			red.ifPresent(x->System.out.println("Rendez Vous not NUl ************"));
 
-			Consultation cons1= new Consultation();
+			ConsultationEntity cons1= new ConsultationEntity();
 			cons1.setDateConsultation(new Date());
 			cons1.setRendezVous(red1);
 			cons1.setPrix_consultation(1428.0);
@@ -109,7 +105,7 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			calendar2.set(Calendar.HOUR, 17);
 			calendar2.set(Calendar.MINUTE, 30);
 
-			RendezVous rendezVous2 = new RendezVous();
+			RendezVousEntity rendezVous2 = new RendezVousEntity();
 			rendezVous2.setDate(calendar2.getTime());
 			rendezVous2.setStatus(StatusRDV.PENDING);
 			rendezVous2.setMedecin(medecin);
@@ -123,7 +119,7 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 			{
 				calendar2.set(Calendar.HOUR, h);
 				calendar2.set(Calendar.MINUTE, 0);
-				RendezVous rdv = new RendezVous();
+				RendezVousEntity rdv = new RendezVousEntity();
 				rdv.setDate(calendar2.getTime());
 				rdv.setStatus(StatusRDV.OPEN);
 				rdv.setMedecin(medecin);

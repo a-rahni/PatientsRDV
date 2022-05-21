@@ -1,15 +1,13 @@
 package com.autoformation.hopital.services;
 
-import com.autoformation.hopital.entities.RendezVous;
+import com.autoformation.hopital.entities.RendezVousEntity;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public interface IRendezVousService {
 
-    RendezVous saveRendezVous(RendezVous rendezVous);
-    Optional<RendezVous> getRendezVousById(Long id);
+    RendezVousEntity saveRendezVous(RendezVousEntity rendezVous);
+    Optional<RendezVousEntity> getRendezVousById(Long id);
 
 
     void deleteRDVById(Long id);

@@ -1,6 +1,7 @@
 package com.autoformation.hopital.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.autoformation.hopital.dtos.Patient;
+import com.autoformation.hopital.dtos.RendezVous;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 //@XmlRootElement  // pour le mapping objet xml lib JAXON
 @Entity
@@ -19,7 +20,7 @@ import java.util.Date;
 //@Builder
 @Table(name="patient")
 @DynamicUpdate /* lors d'une modification, la requete sql ne reécrit que les champs modifié*/
-public class Patient {
+public class PatientEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
@@ -43,7 +44,25 @@ public class Patient {
             //orphanRemoval = true
     )
     //JPA EntityManagerFactory: Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn
-    private Collection<RendezVous> rendezVous = new ArrayList<>();
-    //private List<RendezVous> rendezVous;
+    private Collection<RendezVousEntity> rendezVous = new ArrayList<>();
     // quand fetch EAGER est utilisé , il faut initialiser (instancier) la collection
+
+    public Patient toPatientDto(){
+        Patient p= new Patient();
+
+        p.setId(this.id);
+        p.setNom(this.nom);
+        p.setPrenom(this.prenom);
+        p.setAdresse(this.adresse);
+        p.setEmail(this.email);
+        p.setDateNaissance(this.dateNaissance);
+        p.setMalade(this.malade);
+
+        List<RendezVous> rdv = new ArrayList<RendezVous>() ;
+        for(RendezVousEntity r:rendezVous){
+            rdv.add(r.toRendezVousDto());
+        }
+        p.setRendezVous(rdv);
+        return p;
+    }
 }

@@ -1,6 +1,6 @@
 package com.autoformation.hopital.services;
 
-import com.autoformation.hopital.entities.Consultation;
+import com.autoformation.hopital.entities.ConsultationEntity;
 import com.autoformation.hopital.repositories.ConsultationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +17,12 @@ public class ConsultationServiceImpl implements IConsultationService {
     }
 
     @Override
-    public Consultation saveConsultation(Consultation consultation) {
+    public ConsultationEntity saveConsultation(ConsultationEntity consultation) {
         return consultationRepository.save(consultation);
     }
 
     @Override
-    public Optional<Consultation> getConsultationById(Long id) {
+    public Optional<ConsultationEntity> getConsultationById(Long id) {
         return consultationRepository.findById(id);
     }
 
