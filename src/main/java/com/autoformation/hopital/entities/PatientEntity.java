@@ -47,22 +47,22 @@ public class PatientEntity {
     private Collection<RendezVousEntity> rendezVous = new ArrayList<>();
     // quand fetch EAGER est utilisé , il faut initialiser (instancier) la collection
 
-    public Patient toPatientDto(){
-        Patient p= new Patient();
+    public Patient toPatient(){
+        Patient patient= new Patient();
 
-        p.setId(this.id);
-        p.setNom(this.nom);
-        p.setPrenom(this.prenom);
-        p.setAdresse(this.adresse);
-        p.setEmail(this.email);
-        p.setDateNaissance(this.dateNaissance);
-        p.setMalade(this.malade);
+        patient.setId(this.id);
+        patient.setNom(this.nom);
+        patient.setPrenom(this.prenom);
+        patient.setAdresse(this.adresse);
+        patient.setEmail(this.email);
+        patient.setDateNaissance(this.dateNaissance);
+        patient.setMalade(this.malade);
 
         List<RendezVous> rdv = new ArrayList<RendezVous>() ;
-        for(RendezVousEntity r:rendezVous){
-            rdv.add(r.toRendezVousDto());
-        }
-        p.setRendezVous(rdv);
-        return p;
+//        for(RendezVousEntity r:rendezVous){
+//            rdv.add(r.toRendezVousDto());
+//        }
+//        p.setRendezVous(rdv);
+        return patient;
     }
 }

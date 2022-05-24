@@ -32,7 +32,7 @@ public class RendezVousEntity {
             //cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name="medecin_id")
+    @JoinColumn(name="medecin_id", nullable = false)
     private MedecinEntity medecin;
 
     @OneToOne(mappedBy = "rendezVous",
@@ -40,11 +40,11 @@ public class RendezVousEntity {
     )
     private ConsultationEntity consultation;
 
-    public RendezVous toRendezVousDto(){
+    public RendezVous toRendezVous(){
         RendezVous rdv = new RendezVous();
         rdv.setId(this.id);
-        //if(this.medecin != null)   rdv.setMedecin(this.medecin.toMedecinDto());
-        //if(this.patient != null)   rdv.setPatient(this.patient.toPatientDto());
+        if(this.medecin != null)   rdv.setMedecin(this.medecin.toMedecin());
+        if(this.patient != null)   rdv.setPatient(this.patient.toPatient());
         rdv.setDate(this.date);
         rdv.setStatus(this.status);
         //rdv.setConsultation(this.consultation);

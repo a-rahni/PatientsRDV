@@ -43,22 +43,23 @@ public class MedecinEntity {
     // JPA EntityManagerFactory: Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn
     private Collection<RendezVousEntity> rendezVous = new ArrayList();
 
-    public Medecin toMedecinDto(){
-        Medecin m= new Medecin();
+    public Medecin toMedecin(){
+        Medecin medecin= new Medecin();
 
-        m.setId(this.id);
-        m.setNom(this.nom);
-        m.setPrenom(this.prenom);
-        m.setAdresse(this.adresse);
-        m.setEmail(this.email);
-        m.setDateNaissance(this.dateNaissance);
-        m.setSpecialite(this.specialite);
+        medecin.setId(this.id);
+        medecin.setNom(this.nom);
+        medecin.setPrenom(this.prenom);
+        medecin.setAdresse(this.adresse);
+        medecin.setEmail(this.email);
+        medecin.setDateNaissance(this.dateNaissance);
+        medecin.setSpecialite(this.specialite);
 
         List<RendezVous> rdv = new ArrayList<RendezVous>() ;
-        for(RendezVousEntity r:rendezVous){
-            rdv.add(r.toRendezVousDto());
-        }
-        m.setRendezVous(rdv);
-        return m;
+        /** to avoid cyclique dependance for getMedecin */
+//        for(RendezVousEntity r:rendezVous){
+//            rdv.add(r.toRendezVousDto());
+//        }
+//        m.setRendezVous(rdv);
+        return medecin;
     }
 }
