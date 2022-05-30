@@ -8,6 +8,7 @@ import com.autoformation.hopital.entities.PatientEntity;
 import com.autoformation.hopital.entities.StatusRDV;
 import com.autoformation.hopital.repositories.PatientRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,8 +65,12 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public Page<Patient> getPatientByName(String kw, Pageable page) {
-        return  (Page<Patient>)patientRepository.findByNomContains(kw, page).stream()
-                .map(p->p.toPatient()).collect(Collectors.toList());
+        Page<PatientEntity> pagePatients = patientRepository.findByNomContains(kw, page);
+        return new PageImpl<Patient>(pagePatients.stream()
+                                    .map(patientEntity -> patientEntity.toPatient()).collect(Collectors.toList()),
+                pagePatients.getPageable(),
+                pagePatients.getTotalElements()
+        );
     }
 
     @Override

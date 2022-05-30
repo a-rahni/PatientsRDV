@@ -8,6 +8,7 @@ import com.autoformation.hopital.entities.StatusRDV;
 import com.autoformation.hopital.repositories.MedecinRepository;
 import com.autoformation.hopital.repositories.RendezVousRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,8 +69,11 @@ public class MedecinServiceImpl implements IMedecinService {
 
     @Override
     public Page<Medecin> getMedecinByName(String kw, Pageable page) {
-        return (Page<Medecin>) medecinRepository.findByNomContains(kw, page).stream()
+        Page<MedecinEntity> pageMedecins = medecinRepository.findByNomContains(kw, page);
+        List<Medecin> medecins = pageMedecins.stream()
                 .map(medecinEntity -> medecinEntity.toMedecin()).collect(Collectors.toList());
+        return new PageImpl<Medecin>(medecins,pageMedecins.getPageable(),pageMedecins.getTotalElements());
+        //return new PageImpl<Medecin>(medecins);
     }
 
     @Override
