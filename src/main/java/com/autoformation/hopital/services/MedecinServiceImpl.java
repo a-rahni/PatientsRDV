@@ -39,7 +39,7 @@ public class MedecinServiceImpl implements IMedecinService {
 
     @Override
     public Medecin updateMedecin(Medecin medecin, Long id) {
-        if (!getMedecinById(id).isPresent()){
+        if (getMedecinById(id).isPresent()){
             medecin.setId(id);
             return medecinRepository.save(medecin.toMedecinEntity()).toMedecin();
         }
@@ -63,7 +63,7 @@ public class MedecinServiceImpl implements IMedecinService {
         Page<MedecinEntity> pageMedecinEntity = medecinRepository.findAll(PageRequest.of(page,size));
         List<Medecin> listMedecin =pageMedecinEntity.stream()
                 .map(medecinEntity -> medecinEntity.toMedecin()).collect(Collectors.toList());
-        return (Page<Medecin>)listMedecin;
+        return new PageImpl<Medecin>(listMedecin,pageMedecinEntity.getPageable(),pageMedecinEntity.getTotalElements());
 
     }
 

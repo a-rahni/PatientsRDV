@@ -31,15 +31,18 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public Patient savePatient(Patient patient) {
-        PatientEntity patientEntity = patient.toPatientEntity();
-        //if (!patientRepository.findById(patientEntity.getId()).isPresent())
+        if(patient != null) {
+            PatientEntity patientEntity = patient.toPatientEntity();
+            //if (!patientRepository.findById(patientEntity.getId()).isPresent())
             return patientRepository.save(patientEntity).toPatient();
-        //throw new RuntimeException("Add new Patient with existing id is not possible");
+            //throw new RuntimeException("Add new Patient with existing id is not possible");
+        }
+        throw new RuntimeException("a new Patient must be not null");
     }
 
     @Override
     public Patient updatePatient(Patient patient, Long id) {
-        if (!getPatientById(id).isPresent()){
+        if (patientRepository.findById(id).isPresent()){
             patient.setId(id);
             return patientRepository.save(patient.toPatientEntity()).toPatient();
         }
@@ -47,9 +50,8 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
-    public void deletePatientById(Long id) {
+    public void deletePatientById(Long id){
         patientRepository.deleteById(id);
-
     }
 
     @Override
@@ -59,34 +61,43 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public Page<Patient> getAllPatient(int page, int size) {
-        return  (Page<Patient>)patientRepository.findAll(PageRequest.of(page,size)).stream()
-                .map(patient->patient.toPatient()).collect(Collectors.toList());
-    }
-
-    @Override
-    public Page<Patient> getPatientByName(String kw, Pageable page) {
-        Page<PatientEntity> pagePatients = patientRepository.findByNomContains(kw, page);
+        Page<PatientEntity> pagePatients = patientRepository.findAll(PageRequest.of(page,size));
         return new PageImpl<Patient>(pagePatients.stream()
-                                    .map(patientEntity -> patientEntity.toPatient()).collect(Collectors.toList()),
+                .map(patientEntity -> patientEntity.toPatient()).collect(Collectors.toList()),
                 pagePatients.getPageable(),
                 pagePatients.getTotalElements()
         );
     }
 
     @Override
-    public Optional<Patient> getPatientById(Long id) {
-        Optional<Patient> medecin;
-        Optional<PatientEntity> patientEntity = patientRepository.findById(id);
-        if(patientEntity.isPresent())  return Optional.ofNullable(patientEntity.get().toPatient());
-        return Optional.ofNullable(null);
+    public Page<Patient> getPatientByName(String kw, Pageable page) {
+        if(kw != null) {
+            Page<PatientEntity> pagePatients = patientRepository.findByNomContains(kw, page);
+            return new PageImpl<Patient>(pagePatients.stream()
+                    .map(patientEntity -> patientEntity.toPatient()).collect(Collectors.toList()),
+                    pagePatients.getPageable(),
+                    pagePatients.getTotalElements()
+            );
+        }
+        throw new RuntimeException("the searched name must be not null");
     }
 
     @Override
     public List<Patient> getPatientByName(String name) {
 
-        return patientRepository.findByNom(name).stream()
-                .map(patientEntity -> patientEntity.toPatient())
-                .collect(Collectors.toList());
+        if(null != name) {
+            return patientRepository.findByNom(name).stream()
+                    .map(patientEntity -> patientEntity.toPatient())
+                    .collect(Collectors.toList());
+        }
+        throw new RuntimeException("the searched name must be not null");
+    }
+
+    @Override
+    public Optional<Patient> getPatientById(Long id) {
+        Optional<PatientEntity> patientEntity = patientRepository.findById(id);
+        if(patientEntity.isPresent())  return Optional.ofNullable(patientEntity.get().toPatient());
+        return Optional.ofNullable(null);
     }
 
     @Override

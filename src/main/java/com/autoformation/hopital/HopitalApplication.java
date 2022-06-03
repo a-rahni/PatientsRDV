@@ -39,8 +39,9 @@ public class HopitalApplication /*implements CommandLineRunner*/ {
 	// CommandLineRunner contient une méthode run, donc on fournit le code qui sera executé
 	// on peut rajouter des paramètres qu'on aura besoin. si un objet spring va faire l'injection de dépendance
 	// sans utiliser autowired
-	@Bean
+
 	@Transactional
+	@Bean
 	CommandLineRunner start(IPatientService patientRepo,
 							IMedecinService medecinRepo,
 							IRendezVousService rendezVousRepo,
